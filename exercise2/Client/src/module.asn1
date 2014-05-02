@@ -1,0 +1,22 @@
+Protocol DEFINITIONS ::= BEGIN
+
+	Request ::= SEQUENCE {
+		value [0] IMPLICIT INTEGER
+	}
+	
+	Response ::= SEQUENCE {
+		value	[0] IMPLICIT INTEGER, 
+		randStr [1] IMPLICIT PrintableString( SIZE (10 .. 20))
+	}
+
+	Verification ::= SEQUENCE {
+		result 	[0] IMPLICIT ENUMERATED { ok(0), fail(1) }
+	}
+	
+	PDU ::= CHOICE {
+		request [0] IMPLICIT Request,
+		response [1] IMPLICIT Response,
+		verification [2] IMPLICIT Verification			
+	}
+END
+
