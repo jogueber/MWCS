@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 	// fill request data
-	pdu_request->choice.request.value = 23;
+	pdu_request->choice.request.value = value;
 	pdu_request->present = PDU_PR_request;
 	// encode pdu to buffer
 	char buffer[BUFFER_SIZE];
