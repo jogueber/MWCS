@@ -145,10 +145,6 @@ public class Server {
 					}
 					// wait for response
 					numBytes = sock.getInputStream().read(buff);	
-//					if (sock.getInputStream().available() > 0) {
-//						numBytes += sock.getInputStream().read(buff, numBytes, sock.getInputStream().available());
-//					}
-					
 					inputStream = new ByteArrayInputStream(buff);
 					in = new BerInputStream(inputStream);
 					PDU response = new PDU("response");
