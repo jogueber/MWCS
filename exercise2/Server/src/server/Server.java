@@ -5,13 +5,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Arrays;
 import java.util.Random;
 
 import com.chaosinmotion.asn1.AsnFatalException;
 import com.chaosinmotion.asn1.BerInputStream;
 import com.chaosinmotion.asn1.BerOutputStream;
-import com.turkcelltech.jac.PrintableString;
 
 import server.communication.PDU;
 import server.communication.Request;
@@ -146,7 +144,7 @@ public class Server {
 						break;
 					}
 					// wait for response
-					numBytes = sock.getInputStream().read(buff);
+					numBytes = sock.getInputStream().read(buff);	
 					inputStream = new ByteArrayInputStream(buff);
 					in = new BerInputStream(inputStream);
 					PDU response = new PDU("response");

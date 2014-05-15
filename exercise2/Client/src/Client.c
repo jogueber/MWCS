@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 	// fill request data
-	pdu_request->choice.request.value = 23;
+	pdu_request->choice.request.value = value;
 	pdu_request->present = PDU_PR_request;
 	// encode pdu to buffer
 	char buffer[BUFFER_SIZE];
@@ -162,11 +162,10 @@ int main(int argc, char *argv[]) {
 	}
 	// pdu_resp now contains swapped random string, we can send it back to server
 	enc = der_encode_to_buffer(&asn_DEF_PDU, pdu_resp, buffer, sizeof(buffer));
-
-	if ((write(sock, buffer, strlen(buffer))) == -1) {
+	if (write(sock, buffer, sizeof(buffer)) == -1) {
 		error_exit("Failed to send value to server.");
 	}
-	printf("sent : %li, %s ", pdu_resp->choice.response.value,
+	printf("sent: %li, %s ", pdu_resp->choice.response.value,
 			pdu_resp->choice.response.randStr.buf);
 	switch (printOption) {
 	case ENC:
