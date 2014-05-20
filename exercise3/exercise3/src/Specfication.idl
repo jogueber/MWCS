@@ -1,0 +1,12 @@
+module Specfication {
+
+	interface StockIndex{
+	attribute double Price;
+	attribute string name;
+	attribute strind isn;
+	};
+	
+	interface Server{};
+	
+	interface Client{};
+};
