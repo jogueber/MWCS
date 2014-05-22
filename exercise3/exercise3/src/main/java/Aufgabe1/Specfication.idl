@@ -1,0 +1,10 @@
+module Specfication {
+
+	exception NoSuchStock{};
+	
+	interface quoter{
+	double getStockByIsn(in string isn) raises (NoSuchStock);
+	double getStockByName(in string name) raises (NoSuchStock);
+	};
+
+};
