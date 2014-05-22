@@ -7,32 +7,32 @@ package Specfication;
 * Donnerstag, 22. Mai 2014 11:46 Uhr MESZ
 */
 
-public final class quoterHolder implements org.omg.CORBA.portable.Streamable
+public final class QuoterHolder implements org.omg.CORBA.portable.Streamable
 {
-  public Specfication.quoter value = null;
+  public Specfication.Quoter value = null;
 
-  public quoterHolder ()
+  public QuoterHolder ()
   {
   }
 
-  public quoterHolder (Specfication.quoter initialValue)
+  public QuoterHolder (Specfication.Quoter initialValue)
   {
     value = initialValue;
   }
 
   public void _read (org.omg.CORBA.portable.InputStream i)
   {
-    value = Specfication.quoterHelper.read (i);
+    value = Specfication.QuoterHelper.read (i);
   }
 
   public void _write (org.omg.CORBA.portable.OutputStream o)
   {
-    Specfication.quoterHelper.write (o, value);
+    Specfication.QuoterHelper.write (o, value);
   }
 
   public org.omg.CORBA.TypeCode _type ()
   {
-    return Specfication.quoterHelper.type ();
+    return Specfication.QuoterHelper.type ();
   }
 
 }

@@ -8,11 +8,11 @@ package Specfication;
 * Donnerstag, 22. Mai 2014 11:46 Uhr MESZ
 */
 
-abstract public class quoterHelper
+abstract public class QuoterHelper
 {
   private static String  _id = "IDL:Specfication/quoter:1.0";
 
-  public static void insert (org.omg.CORBA.Any a, Specfication.quoter that)
+  public static void insert (org.omg.CORBA.Any a, Specfication.Quoter that)
   {
     org.omg.CORBA.portable.OutputStream out = a.create_output_stream ();
     a.type (type ());
@@ -20,7 +20,7 @@ abstract public class quoterHelper
     a.read_value (out.create_input_stream (), type ());
   }
 
-  public static Specfication.quoter extract (org.omg.CORBA.Any a)
+  public static Specfication.Quoter extract (org.omg.CORBA.Any a)
   {
     return read (a.create_input_stream ());
   }
@@ -30,7 +30,7 @@ abstract public class quoterHelper
   {
     if (__typeCode == null)
     {
-      __typeCode = org.omg.CORBA.ORB.init ().create_interface_tc (Specfication.quoterHelper.id (), "quoter");
+      __typeCode = org.omg.CORBA.ORB.init ().create_interface_tc (Specfication.QuoterHelper.id (), "quoter");
     }
     return __typeCode;
   }
@@ -40,43 +40,43 @@ abstract public class quoterHelper
     return _id;
   }
 
-  public static Specfication.quoter read (org.omg.CORBA.portable.InputStream istream)
+  public static Specfication.Quoter read (org.omg.CORBA.portable.InputStream istream)
   {
-    return narrow (istream.read_Object (_quoterStub.class));
+    return narrow (istream.read_Object (_QuoterStub.class));
   }
 
-  public static void write (org.omg.CORBA.portable.OutputStream ostream, Specfication.quoter value)
+  public static void write (org.omg.CORBA.portable.OutputStream ostream, Specfication.Quoter value)
   {
     ostream.write_Object ((org.omg.CORBA.Object) value);
   }
 
-  public static Specfication.quoter narrow (org.omg.CORBA.Object obj)
+  public static Specfication.Quoter narrow (org.omg.CORBA.Object obj)
   {
     if (obj == null)
       return null;
-    else if (obj instanceof Specfication.quoter)
-      return (Specfication.quoter)obj;
+    else if (obj instanceof Specfication.Quoter)
+      return (Specfication.Quoter)obj;
     else if (!obj._is_a (id ()))
       throw new org.omg.CORBA.BAD_PARAM ();
     else
     {
       org.omg.CORBA.portable.Delegate delegate = ((org.omg.CORBA.portable.ObjectImpl)obj)._get_delegate ();
-      Specfication._quoterStub stub = new Specfication._quoterStub ();
+      Specfication._QuoterStub stub = new Specfication._QuoterStub ();
       stub._set_delegate(delegate);
       return stub;
     }
   }
 
-  public static Specfication.quoter unchecked_narrow (org.omg.CORBA.Object obj)
+  public static Specfication.Quoter unchecked_narrow (org.omg.CORBA.Object obj)
   {
     if (obj == null)
       return null;
-    else if (obj instanceof Specfication.quoter)
-      return (Specfication.quoter)obj;
+    else if (obj instanceof Specfication.Quoter)
+      return (Specfication.Quoter)obj;
     else
     {
       org.omg.CORBA.portable.Delegate delegate = ((org.omg.CORBA.portable.ObjectImpl)obj)._get_delegate ();
-      Specfication._quoterStub stub = new Specfication._quoterStub ();
+      Specfication._QuoterStub stub = new Specfication._QuoterStub ();
       stub._set_delegate(delegate);
       return stub;
     }

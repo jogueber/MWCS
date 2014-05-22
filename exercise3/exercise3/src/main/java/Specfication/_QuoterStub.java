@@ -8,7 +8,7 @@ package Specfication;
 * Donnerstag, 22. Mai 2014 11:46 Uhr MESZ
 */
 
-public class _quoterStub extends org.omg.CORBA.portable.ObjectImpl implements Specfication.quoter
+public class _QuoterStub extends org.omg.CORBA.portable.ObjectImpl implements Specfication.Quoter
 {
 
   public double getStockByIsn (String isn) throws Specfication.NoSuchStock

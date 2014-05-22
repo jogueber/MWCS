@@ -7,9 +7,9 @@ import org.omg.CORBA.DoubleHolder;
 import org.omg.CORBA.ORB;
 
 import Specfication.NoSuchStock;
-import Specfication.quoterPOA;
+import Specfication.QuoterPOA;
 
-public class QuoterImpl extends quoterPOA  {
+public class QuoterImpl extends QuoterPOA  {
 	@Setter
 	private ORB orb;
 	@Setter

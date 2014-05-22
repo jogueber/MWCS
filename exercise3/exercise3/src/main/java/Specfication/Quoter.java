@@ -8,6 +8,6 @@ package Specfication;
 * Donnerstag, 22. Mai 2014 11:46 Uhr MESZ
 */
 
-public interface quoter extends quoterOperations, org.omg.CORBA.Object, org.omg.CORBA.portable.IDLEntity 
+public interface Quoter extends QuoterOperations, org.omg.CORBA.Object, org.omg.CORBA.portable.IDLEntity 
 {
 } // interface quoter

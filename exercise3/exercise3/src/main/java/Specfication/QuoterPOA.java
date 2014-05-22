@@ -8,8 +8,8 @@ package Specfication;
 * Donnerstag, 22. Mai 2014 11:46 Uhr MESZ
 */
 
-public abstract class quoterPOA extends org.omg.PortableServer.Servant
- implements Specfication.quoterOperations, org.omg.CORBA.portable.InvokeHandler
+public abstract class QuoterPOA extends org.omg.PortableServer.Servant
+ implements Specfication.QuoterOperations, org.omg.CORBA.portable.InvokeHandler
 {
 
   // Constructors
@@ -78,15 +78,15 @@ public abstract class quoterPOA extends org.omg.PortableServer.Servant
     return (String[])__ids.clone ();
   }
 
-  public quoter _this() 
+  public Quoter _this() 
   {
-    return quoterHelper.narrow(
+    return QuoterHelper.narrow(
     super._this_object());
   }
 
-  public quoter _this(org.omg.CORBA.ORB orb) 
+  public Quoter _this(org.omg.CORBA.ORB orb) 
   {
-    return quoterHelper.narrow(
+    return QuoterHelper.narrow(
     super._this_object(orb));
   }
 
