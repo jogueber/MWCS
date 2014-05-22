@@ -27,5 +27,11 @@
 			<version>1.12.6</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.0</version>
+		</dependency>
+
 	</dependencies>
 </project>
