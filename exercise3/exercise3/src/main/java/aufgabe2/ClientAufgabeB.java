@@ -10,7 +10,7 @@ public class ClientAufgabeB {
 
 	public static void main(String[] args) {
 		try {
-			if (args.length < 3)
+			if (args.length < 4)
 				return;
 			ORB orb = ORB.init(args, null);
 			org.omg.CORBA.Object stockService = orb
