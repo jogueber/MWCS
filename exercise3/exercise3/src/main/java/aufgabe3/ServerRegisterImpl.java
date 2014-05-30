@@ -7,9 +7,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
 import org.apache.commons.collections.map.HashedMap;
+import org.omg.CORBA.ORB;
 
 import callback.NoSuchStock;
 import callback.Client_Handler.Serverpush;
@@ -17,6 +21,9 @@ import callback.Client_Handler.Stock;
 import callback.Server_Handler.Server_RegisterPOA;
 
 public class ServerRegisterImpl extends Server_RegisterPOA {
+	@Getter
+	@Setter
+	private ORB orb;
 
 	private Set<Stock> stocks = new HashSet<>();
 

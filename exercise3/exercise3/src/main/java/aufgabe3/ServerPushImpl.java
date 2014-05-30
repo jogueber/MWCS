@@ -1,13 +1,20 @@
 package aufgabe3;
 
+import org.omg.CORBA.ORB;
+
 import lombok.Getter;
+import lombok.Setter;
 import callback.Client_Handler.ServerpushPOA;
 import callback.Client_Handler.Stock;
 
 public class ServerPushImpl extends ServerpushPOA {
 	
 	@Getter
-	 private	Stock recived;
+	@Setter
+	private ORB orb;
+	
+	@Getter
+	 private Stock recived;
 	
 	@Override
 	public void push(Stock data) {

@@ -51,6 +51,7 @@ public class Server {
 		NamingContext ncRef = NamingContextHelper.narrow(objRef);
 
 		regist = new ServerRegisterImpl();
+		regist.setOrb(orb);
 
 		POA rootpoa = POAHelper.narrow(orb
 				.resolve_initial_references("RootPOA"));
