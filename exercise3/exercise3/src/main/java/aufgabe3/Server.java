@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,6 +15,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.lang3.StringUtils;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
+import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContext;
 import org.omg.CosNaming.NamingContextHelper;
 import org.omg.PortableServer.POA;
@@ -26,6 +28,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import callback.Client_Handler.Stock;
+import callback.Server_Handler.Server_Register;
+import callback.Server_Handler.Server_RegisterHelper;
 
 public class Server {
 
@@ -44,36 +48,45 @@ public class Server {
 	private static ServerRegisterImpl regist;
 
 	public static void main(String[] args) throws InvalidName, AdapterInactive {
-		ORB orb = ORB.init(args, null);
+		try {
 
-		org.omg.CORBA.Object objRef = orb
-				.resolve_initial_references("NameService");
-		NamingContext ncRef = NamingContextHelper.narrow(objRef);
+			Properties props = System.getProperties();
+			props.put("org.omg.CORBA.ORBInitialPort", "1050");
+			// Replace MyHost with the name of the host on which you are running
+			// the server
+			props.put("org.omg.CORBA.ORBInitialHost", "<MyHost>");
+			ORB orb = ORB.init(args, props);
+			System.out.println("Initialized ORB");
 
-		regist = new ServerRegisterImpl();
-		regist.setOrb(orb);
+			POA rootPOA = POAHelper.narrow(orb
+					.resolve_initial_references("RootPOA"));
 
-		POA rootpoa = POAHelper.narrow(orb
-				.resolve_initial_references("RootPOA"));
-		rootpoa.the_POAManager().activate();
+			regist = new ServerRegisterImpl();
+			rootPOA.activate_object(regist);
 
-		orb.run();
-		while (true) {
-			try {
+			Server_Register reg = Server_RegisterHelper.narrow(rootPOA
+					.servant_to_reference(regist));
+
+			NamingContext namingContext = NamingContextHelper.narrow(orb
+					.resolve_initial_references("NameService"));
+			System.out.println("Resolved NameService");
+			NameComponent[] nc = { new NameComponent("MessageServer", "") };
+			namingContext.rebind(nc, reg);
+
+			rootPOA.the_POAManager().activate();
+
+			orb.run();
+
+			while (true) {
 				List<Stock> refreshed = getDataFromYahoo();
 				for (Stock s : refreshed)
 					regist.refresh(s);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SAXException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Thread.sleep(10000);
+
 			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}

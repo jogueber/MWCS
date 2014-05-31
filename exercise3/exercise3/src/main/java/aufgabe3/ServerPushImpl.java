@@ -22,6 +22,7 @@ public class ServerPushImpl extends ServerpushPOA {
 		recived.price = data.price;
 		recived.name= data.name;
 		recived.isn = data.isn;
+		System.out.println("Recived Stock Name:"+data.name+"Price: "+data.price);
 	}
 
 }
