@@ -1,0 +1,22 @@
+module asynCallback {
+
+exception NoSuchStock{};
+	module client{
+		struct Stock{
+			string name;
+			string isn;
+			double price;
+		};
+		interface ServerReply{ 
+ 			Stock updateStock(in  string  stockname);};
+ 
+};
+module server{	
+	interface Server_Register{
+		   void register_stock(in client::ServerReply client, in string stockname) raises (NoSuchStock);
+		   void unregister_stock(in client::ServerReply client,in string stockname) raises (NoSuchStock);
+		  };
+	
+	};
+
+};
