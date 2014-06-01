@@ -1,27 +1,27 @@
-package asynCallback.client;
+package asynCallback;
 
 
 /**
  * Generated from IDL interface "ServerReply".
  *
  * @author JacORB IDL compiler V 3.4
- * @version generated at 31.05.2014 13:13:42
+ * @version generated at 01.06.2014 13:09:15
  */
 
 public class _ServerReplyStub
 	extends org.omg.CORBA.portable.ObjectImpl
-	implements asynCallback.client.ServerReply
+	implements asynCallback.ServerReply
 {
 	/** Serial version UID. */
 	private static final long serialVersionUID = 1L;
-	private String[] ids = {"IDL:asynCallback/client/ServerReply:1.0"};
+	private String[] ids = {"IDL:asynCallback/ServerReply:1.0"};
 	public String[] _ids()
 	{
 		return ids;
 	}
 
-	public final static java.lang.Class _opsClass = asynCallback.client.ServerReplyOperations.class;
-	public asynCallback.client.Stock updateStock(java.lang.String stockname)
+	public final static java.lang.Class _opsClass = asynCallback.ServerReplyOperations.class;
+	public asynCallback.Stock updateStock(java.lang.String stockname) throws asynCallback.NoSuchStock
 	{
 		while(true)
 		{
@@ -35,7 +35,7 @@ public class _ServerReplyStub
 					java.lang.String tmpResult2 = stockname;
 _os.write_string( tmpResult2 );
 					_is = _invoke(_os);
-					asynCallback.client.Stock _result = asynCallback.client.StockHelper.read(_is);
+					asynCallback.Stock _result = asynCallback.StockHelper.read(_is);
 					return _result;
 				}
 				catch( org.omg.CORBA.portable.RemarshalException _rx )
@@ -47,13 +47,26 @@ _os.write_string( tmpResult2 );
 					String _id = _ax.getId();
 					try
 					{
-							_ax.getInputStream().close();
+						if( _id.equals("IDL:asynCallback/NoSuchStock:1.0"))
+						{
+							throw asynCallback.NoSuchStockHelper.read(_ax.getInputStream());
+						}
+						else 
+						{
+							throw new RuntimeException("Unexpected exception " + _id );
+						}
 					}
-					catch (java.io.IOException e)
+					finally
 					{
-						throw new RuntimeException("Unexpected exception " + e.toString() );
+						try
+						{
+							_ax.getInputStream().close();
+						}
+						catch (java.io.IOException e)
+						{
+							throw new RuntimeException("Unexpected exception " + e.toString() );
+						}
 					}
-					throw new RuntimeException("Unexpected exception " + _id );
 			}
 			finally
 			{
@@ -77,13 +90,19 @@ _os.write_string( tmpResult2 );
 			if( _so == null )
 				continue;
 			ServerReplyOperations _localServant = (ServerReplyOperations)_so.servant;
-			asynCallback.client.Stock _result;
+			asynCallback.Stock _result;
 			try
 			{
 				_result = _localServant.updateStock(stockname);
 				if ( _so instanceof org.omg.CORBA.portable.ServantObjectExt) 
 					((org.omg.CORBA.portable.ServantObjectExt)_so).normalCompletion();
 				return _result;
+			}
+			catch (asynCallback.NoSuchStock ex) 
+			{
+				if ( _so instanceof org.omg.CORBA.portable.ServantObjectExt) 
+					((org.omg.CORBA.portable.ServantObjectExt)_so).exceptionalCompletion(ex);
+				throw ex;
 			}
 			catch (RuntimeException re) 
 			{

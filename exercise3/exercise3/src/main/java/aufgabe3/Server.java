@@ -13,6 +13,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NameComponent;
@@ -40,10 +43,10 @@ public class Server {
 			"LXS.DE", "MRK.DE", "MUV2.DE", "RWE.DE", "SAP.DE", "SDF.DE",
 			"SIE.DE", "TKA.DE", "VOW3.DE" };
 
-	public final static String query = "Select * from select * from yahoo.finance.quote where symbol in(";
+	public final static String query = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quote%20where%20symbol%20in%20(%22";
 
-	public final static String yahooAdress = "http://query.yahooapis.com/v1/public/yql?";
-	public final static String json = "&format=json";
+	
+
 
 	private static ServerRegisterImpl regist;
 
@@ -55,13 +58,15 @@ public class Server {
 			// Replace MyHost with the name of the host on which you are running
 			// the server
 			props.put("org.omg.CORBA.ORBInitialHost", "<MyHost>");
-			ORB orb = ORB.init(args, props);
+			ORB orb = ORB.init(args, null);
 			System.out.println("Initialized ORB");
 
 			POA rootPOA = POAHelper.narrow(orb
 					.resolve_initial_references("RootPOA"));
 
 			regist = new ServerRegisterImpl();
+
+			regist.setOrb(orb);
 			rootPOA.activate_object(regist);
 
 			Server_Register reg = Server_RegisterHelper.narrow(rootPOA
@@ -76,14 +81,10 @@ public class Server {
 			rootPOA.the_POAManager().activate();
 
 			orb.run();
+			
+			
 
-			while (true) {
-				List<Stock> refreshed = getDataFromYahoo();
-				for (Stock s : refreshed)
-					regist.refresh(s);
-				Thread.sleep(10000);
 
-			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -94,9 +95,8 @@ public class Server {
 	public static List<Stock> getDataFromYahoo() throws IOException,
 			ParserConfigurationException, SAXException {
 		String unisymbols = StringUtils.join(symbols, "\",\"");
-		String toSend = query + unisymbols + "\")";
-		String urlFull = yahooAdress + URLEncoder.encode(toSend, "UTF-8")
-				+ json;
+		String urlFull = query + URLEncoder.encode(unisymbols, "UTF-8")+"%22)";
+                
 		List<Stock> tmp = new ArrayList<Stock>();
 		URL url = new URL(urlFull);
 		InputStream is = url.openStream();

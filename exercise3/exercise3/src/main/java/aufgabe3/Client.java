@@ -2,6 +2,8 @@ package aufgabe3;
 
 import java.util.Properties;
 
+import lombok.Getter;
+
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NameComponent;
@@ -24,31 +26,35 @@ import callback.Client_Handler.ServerpushHelper;
 import callback.Server_Handler.Server_RegisterHelper;
 
 public class Client {
-	
-	private static Serverpush imp;
-	
-	public static void main(String[]args) {
-	try{	
-		Properties props = System.getProperties();
-        props.put("org.omg.CORBA.ORBInitialPort", "1050");
-        props.put("org.omg.CORBA.ORBInitialHost", "<MyHost>");
-        ORB orb = ORB.init(args, props);
-	    POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
-         rootpoa.the_POAManager().activate();
-         
-        ServerPushImpl impl=new ServerPushImpl();
-        rootpoa.activate_object(impl);
-        
-        Serverpush ref=ServerpushHelper.narrow(rootpoa.servant_to_reference(impl));
-        
-        Server_Register server=Server_RegisterHelper.narrow(orb.string_to_object("corbaname:iiop:1.2@localhost:1050#MessageServer"));
-        
-        server.register_stock(ref, "BEI.DE");
-        
-        orb.run();
-      
-	}catch(Exception e){
-		System.out.println(e.getStackTrace());
-	}
+	@Getter
+	private static ServerPushImpl imp;
 
+	public static void main(String[] args) {
+		try {
+			Properties props = System.getProperties();
+			props.put("org.omg.CORBA.ORBInitialPort", "1050");
+			props.put("org.omg.CORBA.ORBInitialHost", "localhost");
+			ORB orb = ORB.init(args, props);
+			POA rootpoa = POAHelper.narrow(orb
+					.resolve_initial_references("RootPOA"));
+			rootpoa.the_POAManager().activate();
+			if (imp == null) {
+				ServerPushImpl imp = new ServerPushImpl();
+			}
+			rootpoa.activate_object(imp);
+
+			Serverpush ref = ServerpushHelper.narrow(rootpoa
+					.servant_to_reference(imp));
+
+			Server_Register server = Server_RegisterHelper.narrow(orb
+					.resolve_initial_references("MessageServer"));
+
+			server.register_stock(ref, args[2]);
+
+			orb.run();
+
+		} catch (Exception e) {
+			System.out.println(e.getStackTrace());
+		}
+	}
 }

@@ -1,16 +1,16 @@
-package asynCallback.client;
+package asynCallback;
 
 
 /**
  * Generated from IDL interface "AMI_ServerReplyHandler".
  *
  * @author JacORB IDL compiler V 3.4
- * @version generated at 31.05.2014 13:13:42
+ * @version generated at 01.06.2014 13:09:15
  */
 
 public abstract class AMI_ServerReplyHandlerPOA
 	extends org.omg.PortableServer.Servant
-	implements org.omg.CORBA.portable.InvokeHandler, asynCallback.client.AMI_ServerReplyHandlerOperations
+	implements org.omg.CORBA.portable.InvokeHandler, asynCallback.AMI_ServerReplyHandlerOperations
 {
 	static private final java.util.HashMap<String,Integer> m_opsHash = new java.util.HashMap<String,Integer>();
 	static
@@ -18,17 +18,17 @@ public abstract class AMI_ServerReplyHandlerPOA
 		m_opsHash.put ( "updateStock_excep", Integer.valueOf(0));
 		m_opsHash.put ( "updateStock", Integer.valueOf(1));
 	}
-	private String[] ids = {"IDL:asynCallback/client/AMI_ServerReplyHandler:1.0","IDL:omg.org/Messaging/ReplyHandler:1.0"};
-	public asynCallback.client.AMI_ServerReplyHandler _this()
+	private String[] ids = {"IDL:asynCallback/AMI_ServerReplyHandler:1.0","IDL:omg.org/Messaging/ReplyHandler:1.0"};
+	public asynCallback.AMI_ServerReplyHandler _this()
 	{
 		org.omg.CORBA.Object __o = _this_object() ;
-		asynCallback.client.AMI_ServerReplyHandler __r = asynCallback.client.AMI_ServerReplyHandlerHelper.narrow(__o);
+		asynCallback.AMI_ServerReplyHandler __r = asynCallback.AMI_ServerReplyHandlerHelper.narrow(__o);
 		return __r;
 	}
-	public asynCallback.client.AMI_ServerReplyHandler _this(org.omg.CORBA.ORB orb)
+	public asynCallback.AMI_ServerReplyHandler _this(org.omg.CORBA.ORB orb)
 	{
 		org.omg.CORBA.Object __o = _this_object(orb) ;
-		asynCallback.client.AMI_ServerReplyHandler __r = asynCallback.client.AMI_ServerReplyHandlerHelper.narrow(__o);
+		asynCallback.AMI_ServerReplyHandler __r = asynCallback.AMI_ServerReplyHandlerHelper.narrow(__o);
 		return __r;
 	}
 	public org.omg.CORBA.portable.OutputStream _invoke(String method, org.omg.CORBA.portable.InputStream _input, org.omg.CORBA.portable.ResponseHandler handler)
@@ -51,7 +51,7 @@ public abstract class AMI_ServerReplyHandlerPOA
 			}
 			case 1: // updateStock
 			{
-				asynCallback.client.Stock _arg0=asynCallback.client.StockHelper.read(_input);
+				asynCallback.Stock _arg0=asynCallback.StockHelper.read(_input);
 				_out = handler.createReply();
 				updateStock(_arg0);
 				break;

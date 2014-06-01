@@ -1,10 +1,10 @@
-package asynCallback.client;
+package asynCallback;
 
 /**
  * Generated from IDL interface "AMI_ServerReplyHandler".
  *
  * @author JacORB IDL compiler V 3.4
- * @version generated at 31.05.2014 13:13:42
+ * @version generated at 01.06.2014 13:09:15
  */
 
 public interface AMI_ServerReplyHandler

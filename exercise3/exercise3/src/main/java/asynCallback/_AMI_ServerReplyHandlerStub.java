@@ -1,26 +1,26 @@
-package asynCallback.client;
+package asynCallback;
 
 
 /**
  * Generated from IDL interface "AMI_ServerReplyHandler".
  *
  * @author JacORB IDL compiler V 3.4
- * @version generated at 31.05.2014 13:13:42
+ * @version generated at 01.06.2014 13:09:15
  */
 
 public class _AMI_ServerReplyHandlerStub
 	extends org.omg.CORBA.portable.ObjectImpl
-	implements asynCallback.client.AMI_ServerReplyHandler
+	implements asynCallback.AMI_ServerReplyHandler
 {
 	/** Serial version UID. */
 	private static final long serialVersionUID = 1L;
-	private String[] ids = {"IDL:asynCallback/client/AMI_ServerReplyHandler:1.0","IDL:omg.org/Messaging/ReplyHandler:1.0"};
+	private String[] ids = {"IDL:asynCallback/AMI_ServerReplyHandler:1.0","IDL:omg.org/Messaging/ReplyHandler:1.0"};
 	public String[] _ids()
 	{
 		return ids;
 	}
 
-	public final static java.lang.Class _opsClass = asynCallback.client.AMI_ServerReplyHandlerOperations.class;
+	public final static java.lang.Class _opsClass = asynCallback.AMI_ServerReplyHandlerOperations.class;
 	public void updateStock_excep(org.omg.Messaging.ExceptionHolder excep_holder)
 	{
 		while(true)
@@ -104,7 +104,7 @@ public class _AMI_ServerReplyHandlerStub
 
 	}
 
-	public void updateStock(asynCallback.client.Stock ami_return_val)
+	public void updateStock(asynCallback.Stock ami_return_val)
 	{
 		while(true)
 		{
@@ -115,7 +115,7 @@ public class _AMI_ServerReplyHandlerStub
 				try
 				{
 					_os = _request( "updateStock", true);
-					asynCallback.client.StockHelper.write(_os,ami_return_val);
+					asynCallback.StockHelper.write(_os,ami_return_val);
 					_is = _invoke(_os);
 					return;
 				}

@@ -36,10 +36,27 @@ public class ServerRegisterImpl extends Server_RegisterPOA {
 	public boolean removeStock(Stock stock) {
 		return stocks.remove(stock);
 	}
-	
-	public void refresh(Stock stock){
-		List<Serverpush> tmp=registered.get(stock);
-		for(Serverpush t:tmp){
+
+	public void refresh(Stock stock) {
+		Stock found = null;
+		for (Stock s : stocks) {
+			if (stock.name == s.name) {
+				found = s;
+				break;
+			}
+		}
+		if (found == null) {
+			return;
+		}
+		stocks.remove(found);
+		stocks.add(found);
+		if (!registered.containsKey(found))
+			return;
+
+		List<Serverpush> tmp = registered.get(found);
+		registered.remove(found);
+		registered.put(stock, tmp);
+		for (Serverpush t : tmp) {
 			t.push(stock);
 		}
 	}
@@ -66,9 +83,6 @@ public class ServerRegisterImpl extends Server_RegisterPOA {
 		}
 
 	}
-	
-	
-	
 
 	@Override
 	public void unregister_stock(Serverpush client, String stockname)
@@ -80,12 +94,10 @@ public class ServerRegisterImpl extends Server_RegisterPOA {
 				break;
 			}
 		}
-		if (tmp == null||!registered.containsKey(tmp)) {
+		if (tmp == null || !registered.containsKey(tmp)) {
 			throw new NoSuchStock();
 		}
-		registered.get(tmp).remove(client);	
+		registered.get(tmp).remove(client);
 	}
-	
-	
 
 }

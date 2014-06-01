@@ -1,11 +1,11 @@
-package asynCallback.client;
+package asynCallback;
 
 
 /**
  * Generated from IDL struct "Stock".
  *
  * @author JacORB IDL compiler V 3.4
- * @version generated at 31.05.2014 13:13:42
+ * @version generated at 01.06.2014 13:09:15
  */
 
 public abstract class StockHelper
@@ -19,20 +19,20 @@ public abstract class StockHelper
 			{
 				if (_type == null)
 				{
-					_type = org.omg.CORBA.ORB.init().create_struct_tc(asynCallback.client.StockHelper.id(),"Stock",new org.omg.CORBA.StructMember[]{new org.omg.CORBA.StructMember("name", org.omg.CORBA.ORB.init().create_string_tc(0), null),new org.omg.CORBA.StructMember("isn", org.omg.CORBA.ORB.init().create_string_tc(0), null),new org.omg.CORBA.StructMember("price", org.omg.CORBA.ORB.init().get_primitive_tc(org.omg.CORBA.TCKind.from_int(7)), null)});
+					_type = org.omg.CORBA.ORB.init().create_struct_tc(asynCallback.StockHelper.id(),"Stock",new org.omg.CORBA.StructMember[]{new org.omg.CORBA.StructMember("name", org.omg.CORBA.ORB.init().create_string_tc(0), null),new org.omg.CORBA.StructMember("isn", org.omg.CORBA.ORB.init().create_string_tc(0), null),new org.omg.CORBA.StructMember("price", org.omg.CORBA.ORB.init().get_primitive_tc(org.omg.CORBA.TCKind.from_int(7)), null)});
 				}
 			}
 		}
 		return _type;
 	}
 
-	public static void insert (final org.omg.CORBA.Any any, final asynCallback.client.Stock s)
+	public static void insert (final org.omg.CORBA.Any any, final asynCallback.Stock s)
 	{
 		any.type(type());
 		write( any.create_output_stream(),s);
 	}
 
-	public static asynCallback.client.Stock extract (final org.omg.CORBA.Any any)
+	public static asynCallback.Stock extract (final org.omg.CORBA.Any any)
 	{
 		org.omg.CORBA.portable.InputStream in = any.create_input_stream();
 		try
@@ -54,17 +54,17 @@ public abstract class StockHelper
 
 	public static String id()
 	{
-		return "IDL:asynCallback/client/Stock:1.0";
+		return "IDL:asynCallback/Stock:1.0";
 	}
-	public static asynCallback.client.Stock read (final org.omg.CORBA.portable.InputStream in)
+	public static asynCallback.Stock read (final org.omg.CORBA.portable.InputStream in)
 	{
-		asynCallback.client.Stock result = new asynCallback.client.Stock();
+		asynCallback.Stock result = new asynCallback.Stock();
 		result.name=in.read_string();
 		result.isn=in.read_string();
 		result.price=in.read_double();
 		return result;
 	}
-	public static void write (final org.omg.CORBA.portable.OutputStream out, final asynCallback.client.Stock s)
+	public static void write (final org.omg.CORBA.portable.OutputStream out, final asynCallback.Stock s)
 	{
 		java.lang.String tmpResult0 = s.name;
 out.write_string( tmpResult0 );
