@@ -1,5 +1,7 @@
 package aufgabe4;
 
+import java.util.Properties;
+
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.PortableServer.*;
@@ -15,7 +17,10 @@ public class Client {
 
 	public static void main(String[] args) {
 		try {
-			org.omg.CORBA.ORB orb = org.jacorb.orb.ORB.init(args, null);
+			Properties props = System.getProperties();
+			props.put("org.omg.CORBA.ORBInitialPort", args[0]);
+			props.put("org.omg.CORBA.ORBInitialHost", args[1]);
+			org.omg.CORBA.ORB orb = org.jacorb.orb.ORB.init(args, props);
 
 			POA poa = POAHelper.narrow(orb
 					.resolve_initial_references("RootPOA"));

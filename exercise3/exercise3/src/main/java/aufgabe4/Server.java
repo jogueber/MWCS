@@ -1,6 +1,7 @@
 package aufgabe4;
 
 import java.awt.List;
+import java.util.Properties;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
@@ -15,7 +16,10 @@ public class Server {
 
 	public static void main(String[] args) {
 		try {
-			ORB orb = ORB.init(args, null);
+			Properties props = System.getProperties();
+			props.put("org.omg.CORBA.ORBInitialPort", args[0]);
+			props.put("org.omg.CORBA.ORBInitialHost", args[1]);
+			ORB orb = ORB.init(args, props);
 
 			org.omg.PortableServer.POA poa = POAHelper.narrow(orb
 					.resolve_initial_references("RootPOA"));

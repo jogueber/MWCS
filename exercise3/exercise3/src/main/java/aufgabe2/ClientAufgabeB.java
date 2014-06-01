@@ -21,10 +21,10 @@ public class ClientAufgabeB {
 	public static void main(String[] args) {
 		try {
 			Properties props = System.getProperties();
-			props.put("org.omg.CORBA.ORBInitialPort", "1050");
+			props.put("org.omg.CORBA.ORBInitialPort", args[0]);
 			// Replace localhost with the name of the host on which you are running
 			// the server
-			props.put("org.omg.CORBA.ORBInitialHost", "localhost");
+			props.put("org.omg.CORBA.ORBInitialHost", args[1]);
 
 			ORB orb = ORB.init(args, null);
 			org.omg.CORBA.Object stockService = orb

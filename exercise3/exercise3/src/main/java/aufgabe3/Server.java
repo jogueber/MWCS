@@ -12,6 +12,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import lombok.Setter;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URIUtils;
@@ -47,17 +49,17 @@ public class Server {
 
 	
 
-
+	@Setter
 	private static ServerRegisterImpl regist;
 
 	public static void main(String[] args) throws InvalidName, AdapterInactive {
 		try {
 
 			Properties props = System.getProperties();
-			props.put("org.omg.CORBA.ORBInitialPort", "1050");
+			props.put("org.omg.CORBA.ORBInitialPort", args[0]);
 			// Replace MyHost with the name of the host on which you are running
 			// the server
-			props.put("org.omg.CORBA.ORBInitialHost", "<MyHost>");
+			props.put("org.omg.CORBA.ORBInitialHost", args[1]);
 			ORB orb = ORB.init(args, null);
 			System.out.println("Initialized ORB");
 

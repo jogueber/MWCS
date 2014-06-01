@@ -32,9 +32,9 @@ public class TestAufgabe2 {
 	public void test() {
 		ServerImpl server = new ServerImpl();
 		server.setQuo(testquo);
-		String args[] = { "ORBInitialPort 1050", "ORBInitialHost localhost"};
+		String args[] = { "1050", "localhost"};
 		server.main(args);
-		String[] args2={ "ORBInitialPort 1050", "ORBInitialHost localhost" ,testIsn,testName};
+		String[] args2={ "1050", "localhost" ,testIsn,testName};
 		ClientAufgabeB client=new ClientAufgabeB();
 		client.main(args2);
 		assertTrue(client.getTestResult1()==client.getTestResult2());

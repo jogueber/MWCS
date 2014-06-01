@@ -33,7 +33,7 @@ public class TestAufgabe1 {
 	public void test() {
 		ServerImpl server = new ServerImpl();
 		server.setQuo(testquo);
-		String args[] = { "ORBInitialPort 1050", "ORBInitialHost localhost" };
+		String args[] = { "1050", "localhost" };
 		server.main(args);
 		ClientAufgabea client = new ClientAufgabea();
 		

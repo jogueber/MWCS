@@ -39,9 +39,9 @@ public class aufgabe3Test extends TestCase {
 		serv.setRegist(clientStock);
 		clientStock.addStock(testStock);
 		Client client = new Client();
-		String args[] = { "ORBInitialPort 1050", "ORBInitialHost localhost" };
+		String args[] = { "1050", "localhost" };
 		serv.main(args);
-		String args2[] = { "ORBInitialPort 1050", "ORBInitialHost localhost",
+		String args2[] = { "1050", "localhost",
 				testName };
 		client.main(args2);
 		clientStock.refresh(testStock);

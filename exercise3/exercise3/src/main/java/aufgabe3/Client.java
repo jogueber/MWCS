@@ -32,8 +32,8 @@ public class Client {
 	public static void main(String[] args) {
 		try {
 			Properties props = System.getProperties();
-			props.put("org.omg.CORBA.ORBInitialPort", "1050");
-			props.put("org.omg.CORBA.ORBInitialHost", "localhost");
+			props.put("org.omg.CORBA.ORBInitialPort", args[0]);
+			props.put("org.omg.CORBA.ORBInitialHost", args[1]);
 			ORB orb = ORB.init(args, props);
 			POA rootpoa = POAHelper.narrow(orb
 					.resolve_initial_references("RootPOA"));

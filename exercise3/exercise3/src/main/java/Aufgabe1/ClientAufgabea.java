@@ -22,10 +22,10 @@ public class ClientAufgabea {
 	public static void main(String[] args) {
 		try {
 			Properties props = System.getProperties();
-			props.put("org.omg.CORBA.ORBInitialPort", "1050");
+			props.put("org.omg.CORBA.ORBInitialPort", args[0]);
 			// Replace MyHost with the name of the host on which you are running
 			// the server
-			props.put("org.omg.CORBA.ORBInitialHost", "localhost");
+			props.put("org.omg.CORBA.ORBInitialHost", args[1]);
 			ORB orb = ORB.init(args, props);
 			org.omg.CORBA.Object objRef = orb
 					.resolve_initial_references("NameService");
