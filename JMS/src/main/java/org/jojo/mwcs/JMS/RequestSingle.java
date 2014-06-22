@@ -36,12 +36,11 @@ public class RequestSingle implements ActionListener, MessageListener {
 				|| gui.stockName.getText().equals(" "))
 			return;
 		try {
-			ActiveMQConnectionFactory fact = new ActiveMQConnectionFactory(
-					ActiveMQConnectionFactory.DEFAULT_USER,
-					ActiveMQConnectionFactory.DEFAULT_PASSWORD,
-					ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
+			ActiveMQConnectionFactory mqfac = new ActiveMQConnectionFactory(
+					ServerJMS.getUsername(), ServerJMS.getPassword(),
+					ServerJMS.getUrl());
 
-			QueueConnection con = fact.createQueueConnection("admin", "admin");
+			QueueConnection con = mqfac.createQueueConnection();
 			QueueSession session = con.createQueueSession(false,
 					Session.AUTO_ACKNOWLEDGE);
 			Destination re = session.createQueue(requestName);

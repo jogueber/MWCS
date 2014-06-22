@@ -15,11 +15,19 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import lombok.Getter;
+
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.joda.time.DateTime;
 
 public class ClientB {
 	static ClientGuiB gui;
+	@Getter
+	private static String username;
+	@Getter
+	private static String password;
+	@Getter
+	private static String url;
 
 	// Abfrage von Publish subscirbe
 	public static void main(String[] args) throws JMSException, NamingException {
@@ -28,13 +36,18 @@ public class ClientB {
 		Context ctx = null;
 		TopicConnection connect = null;
 		TopicSession session = null;
+		 username=ActiveMQConnectionFactory.DEFAULT_USER;
+		 password=ActiveMQConnectionFactory.DEFAULT_USER;
+		 url=ActiveMQConnectionFactory.DEFAULT_BROKER_URL;
+		if(args.length==3){
+			username=args[0];
+			password=args[1];
+			url=args[2];
+		}
 
 		try {
 			ctx = new InitialContext();
-			ActiveMQConnectionFactory fact = new ActiveMQConnectionFactory(
-					ActiveMQConnectionFactory.DEFAULT_USER,
-					ActiveMQConnectionFactory.DEFAULT_PASSWORD,
-					ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
+			ActiveMQConnectionFactory fact = new ActiveMQConnectionFactory(username,password,url);
 			connect = fact.createTopicConnection();
 			session = connect.createTopicSession(false,
 					Session.AUTO_ACKNOWLEDGE);

@@ -13,9 +13,11 @@ import javax.jms.MessageProducer;
 import javax.jms.QueueConnection;
 import javax.jms.QueueSession;
 import javax.jms.Session;
+
 import lombok.Setter;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+
 //Aufgabe d handling of Single Requests
 public class SendSingle implements MessageListener, Runnable {
 	@Setter
@@ -65,9 +67,9 @@ public class SendSingle implements MessageListener, Runnable {
 	public void run() {
 		try {
 			ActiveMQConnectionFactory mqfac = new ActiveMQConnectionFactory(
-					"admin", "admin",
-					ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
-			QueueConnection con = mqfac.createQueueConnection("admin", "admin");
+					ClientB.getUsername(), ClientB.getPassword(),
+					ClientB.getUrl());
+			QueueConnection con = mqfac.createQueueConnection();
 			session = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 			Destination dest = session.createQueue(RequestSingle
 					.getRequestName());

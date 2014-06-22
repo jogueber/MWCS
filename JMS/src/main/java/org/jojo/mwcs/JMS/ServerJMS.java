@@ -32,7 +32,12 @@ public class ServerJMS {
 	private final static String TIMECON = "TIME";
 	@Getter
 	private final static String NAMECON = "NAME";
-
+	@Getter
+	private static String username;
+	@Getter
+	private static String password;
+	@Getter
+	private static String url;
 	
 
 	public static void main(String[] args) throws URISyntaxException, Exception {
@@ -51,6 +56,14 @@ public class ServerJMS {
 		// broker.addConnector("vm://localhost");
 		// broker.start();
 		//Setup der Threads für Stocks
+		 username=ActiveMQConnectionFactory.DEFAULT_USER;
+		 password=ActiveMQConnectionFactory.DEFAULT_USER;
+		 url=ActiveMQConnectionFactory.DEFAULT_BROKER_URL;
+		if(args.length==3){
+			username=args[0];
+			password=args[1];
+			url=args[2];
+		}
 		ExecutorService exe = Executors.newCachedThreadPool();
 		setUpStocks();
 		for (Stock s : stocks) {
@@ -86,10 +99,9 @@ public class ServerJMS {
 				try {
 
 					ActiveMQConnectionFactory mqfac = new ActiveMQConnectionFactory(
-							"admin", "admin",
-							ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
-					TopicConnection connect = mqfac.createTopicConnection(
-							"admin", "admin");
+							ServerJMS.getUsername(), ServerJMS.getPassword(),
+							ServerJMS.getUrl());
+					TopicConnection connect = mqfac.createTopicConnection();
 					connect.start();
 
 					TopicSession session = connect.createTopicSession(false,
@@ -130,9 +142,9 @@ public class ServerJMS {
 
 		public void addToQue(MapMessage p) throws JMSException {
 			ActiveMQConnectionFactory mqfac = new ActiveMQConnectionFactory(
-					"admin", "admin",
-					ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
-			Connection con = mqfac.createQueueConnection("admin", "admin");
+					ServerJMS.getUsername(), ServerJMS.getPassword(),
+					ServerJMS.getUrl());
+			Connection con = mqfac.createQueueConnection();
 			Session tp = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
 			Destination destination = tp.createQueue(stock.getName());
