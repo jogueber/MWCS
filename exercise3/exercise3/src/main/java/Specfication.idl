@@ -1,0 +1,17 @@
+module Specfication {
+
+	struct StockIndex{
+	 double Price;
+	 string name;
+	 string isn;
+	};
+	
+	interface quoter{
+	void getStockByIsn(in string isn,out StockIndex stock);
+	void getStockByName(in string name,out StockIndex stock);
+	};
+	
+	interface Server{};
+	
+	interface Client{};
+};

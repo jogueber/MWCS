@@ -1,4 +1,4 @@
-package org.jojo.mwcs.exercise3;
+package org.jojo.mwcs.JMS;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

@@ -1,0 +1,27 @@
+module callback {
+
+	exception NoSuchStock{};
+
+	module Client_Handler{
+		struct Stock{
+		string name;
+		string isn;
+		double price;
+		};
+		
+		interface Serverpush{
+		oneway void push(in Stock data);
+		};
+	
+	};
+	module Server_Handler{
+		interface Server_Register{
+	
+		   void register_stock(in Client_Handler::Serverpush client, in string stockname) raises (NoSuchStock);
+	
+		   void unregister_stock(in Client_Handler::Serverpush client,in string stockname) raises (NoSuchStock);
+		  };
+	
+	};
+
+};
