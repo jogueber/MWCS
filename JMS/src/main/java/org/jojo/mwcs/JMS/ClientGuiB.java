@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -39,7 +40,7 @@ public class ClientGuiB extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-		@Getter
+	@Getter
 	@Setter
 	private Set<Stock> rows;
 	JTextArea area;
@@ -49,7 +50,7 @@ public class ClientGuiB extends JFrame {
 
 	public ClientGuiB(List<Stock> stocks) {
 		super("Client");
-
+		recoverStocks();
 		setLayout(new BorderLayout());
 		setSize(300, 300);
 		setLocation(300, 300);
@@ -64,6 +65,8 @@ public class ClientGuiB extends JFrame {
 			b.append(System.lineSeparator());
 		}
 		area = new JTextArea(b.toString());
+		area.setSize(200, 200);
+		area.setVisible(true);
 		area.setLineWrap(true);
 		area.setEditable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -71,41 +74,80 @@ public class ClientGuiB extends JFrame {
 		JPanel addPanel = new JPanel(new FlowLayout());
 		JLabel nameLabel = new JLabel("Type Name of Stock");
 		stockName = new JTextField("");
+		stockName.setSize(30, 30);
 		JButton ok = new JButton("Request Stock");
+		// Single Request Handling
 		ok.addActionListener(new RequestSingle(this));
-		getContentPane().add(area);
+		getContentPane().add((new JPanel()).add(area));
 		addPanel.add(nameLabel);
 		addPanel.add(ok);
+		addPanel.add(stockName);
 		getContentPane().add(addPanel);
 		pack();
 		setVisible(true);
 	}
+	//deserialisierung
+	private void recoverStocks() {
+		if (!Files.exists(Paths.get(Serial.getFileName()
+				+ Serial.getSerialpath()))) {
 
-	public void insertStock(Stock s) {
-		rows.add(s);
-		StringBuffer b = new StringBuffer();
-		for (Stock t : rows) {
-			b.append(t.getIsn());
-			b.append(t.getName());
-			b.append(t.getPrice());
-			b.append(t.getTime().toString());
-			b.append(System.lineSeparator());
+			return;
 		}
-		area.setText(b.toString());
+		try {
+			JAXBContext context = JAXBContext.newInstance(JaxbList.class);
+			Unmarshaller un = context.createUnmarshaller();
+			JaxbList toadd = (JaxbList) un.unmarshal(Paths.get(
+					Serial.getFileName() + Serial.getSerialpath()).toFile());
+			this.setRows(new HashSet<Stock>(toadd.getStocks()));
+
+		} catch (JAXBException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	public void insertStock(final Stock s) {
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				rows.add(s);
+				StringBuffer b = new StringBuffer();
+				for (Stock t : rows) {
+
+					b.append("ISN:" + t.getIsn() + "  ");
+					b.append("Name:" + t.getName() + " ");
+					b.append("Price: " + t.getPrice() + " Time");
+					b.append(t.getTime().toString());
+					b.append(System.lineSeparator());
+				}
+				area.setText(b.toString());
+
+			}
+		});
+
 	}
 
 	public void updateStocks() {
-		StringBuffer b = new StringBuffer();
-		for (Stock t : rows) {
-			b.append(t.getIsn());
-			b.append(t.getName());
-			b.append(t.getPrice());
-			b.append(t.getTime().toString());
-			b.append(System.lineSeparator());
-		}
-		area.setText(b.toString());
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				StringBuffer b = new StringBuffer();
+				for (Stock t : rows) {
+
+					b.append("ISN:" + t.getIsn() + "  ");
+					b.append("Name:" + t.getName() + " ");
+					b.append("Price: " + t.getPrice() + " Time");
+					b.append(t.getTime().toString());
+					b.append(System.lineSeparator());
+				}
+				area.setText(b.toString());
+
+			}
+		});
 
 	}
+
 	// Aufgabe c Serialisierung
 	private static class Serial extends WindowAdapter {
 		private List<Stock> toSerial;
@@ -113,22 +155,24 @@ public class ClientGuiB extends JFrame {
 		private List<Stock> recovered;
 
 		private ClientGuiB gui;
-
+		@Getter
 		private static final String serialpath = System
 				.getProperty("java.io.tmpdir") + "\\";
-
+		@Getter
 		private static final String fileName = "StocksSerial.xml";
 
 		public Serial(ClientGuiB a) {
-			toSerial = new ArrayList<Stock>(a.getRows());
+			this.gui = a;
 		}
-		//Serialisieren
+
+		// Serialisieren
 		@Override
 		public void windowClosing(WindowEvent e) {
-			 if (toSerial == null || toSerial.isEmpty()) {
-			 return;
-			 }
+			if (toSerial == null || toSerial.isEmpty()) {
+				return;
+			}
 			try {
+				toSerial = new ArrayList<Stock>(gui.getRows());
 				JAXBContext context = JAXBContext.newInstance(JaxbList.class);
 				Marshaller m = context.createMarshaller();
 				m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -144,50 +188,8 @@ public class ClientGuiB extends JFrame {
 			} catch (JAXBException t) {
 				t.printStackTrace();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		}
-		//Recovern
-		@Override
-		public void windowOpened(WindowEvent e) {
-			if (!Files.exists(Paths.get(serialpath + fileName))) {
-
-				return;
-			}
-			try {
-				JAXBContext context = JAXBContext.newInstance(JaxbList.class);
-				Unmarshaller un = context.createUnmarshaller();
-				JaxbList toadd = (JaxbList) un.unmarshal(Paths.get(
-						serialpath + fileName).toFile());
-				gui.setRows(new HashSet<Stock>(toadd.getStocks()));
-
-			} catch (JAXBException e1) {
-				e1.printStackTrace();
-			}
-		}
-
-		@XmlRootElement(name = "Stockliste")
-		@XmlAccessorType(XmlAccessType.FIELD)
-		private static class JaxbList {
-			public JaxbList() {
-			}
-
-			public JaxbList(List<Stock> stocks) {
-				super();
-				this.stocks = stocks;
-			}
-
-			public List<Stock> getStocks() {
-				return this.stocks;
-			}
-
-			public void setStocks(List<Stock> stocks) {
-				this.stocks = stocks;
-			}
-
-			@XmlElement(name = "stocks", type = Stock.class)
-			private List<Stock> stocks;
 		}
 	}
 }

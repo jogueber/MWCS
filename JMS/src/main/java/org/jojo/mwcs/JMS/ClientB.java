@@ -19,7 +19,8 @@ import org.joda.time.DateTime;
 
 public class ClientB {
 	static ClientGuiB gui;
-	//Abfrage von Publish subscirbe
+
+	// Abfrage von Publish subscirbe
 	public static void main(String[] args) throws JMSException, NamingException {
 		gui = new ClientGuiB(new ArrayList<Stock>());
 		String[] isns = ServerJMS.getIsns();
@@ -36,7 +37,7 @@ public class ClientB {
 			connect = fact.createTopicConnection();
 			session = connect.createTopicSession(false,
 					Session.AUTO_ACKNOWLEDGE);
-			//für alle subscriben
+			// für alle subscriben
 			for (String top : isns) {
 
 				Topic dest = session.createTopic(top);
@@ -57,7 +58,9 @@ public class ClientB {
 							DateTime time = DateTime.parse(message
 									.getStringProperty(ServerJMS.getTIMECON()));
 							Stock tmp = new Stock(name, id, price, time);
-							System.out.println("Got Stock! Name:"+name+"Price:"+price+" From "+time.toString());
+							System.out.println("Got Stock! Name:" + name
+									+ "Price:" + price + " From "
+									+ time.toString());
 							gui.insertStock(tmp);
 						} catch (JMSException e) {
 							e.printStackTrace();
