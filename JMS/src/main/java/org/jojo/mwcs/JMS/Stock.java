@@ -1,5 +1,7 @@
 package org.jojo.mwcs.JMS;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -7,30 +9,62 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.joda.time.DateTime;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
-@AllArgsConstructor
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Stock {
 
-	@Getter
+	public Stock() {
+	}
+
 	@XmlElement
-	@Setter
 	private String name;
-	@Getter
+
 	@XmlAttribute
-	@Setter
 	private String isn;
-	@Getter
 	@XmlElement
-	@Setter
 	private double price;
-	@Getter
 	@XmlElement
-	@Setter
 	private DateTime time;
+
+	public Stock(String name, String isn, double price, DateTime time) {
+		super();
+		this.name = name;
+		this.isn = isn;
+		this.price = price;
+		this.time = time;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getIsn() {
+		return this.isn;
+	}
+
+	public void setIsn(String isn) {
+		this.isn = isn;
+	}
+
+	public double getPrice() {
+		return this.price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public DateTime getTime() {
+		return this.time;
+	}
+
+	public void setTime(DateTime time) {
+		this.time = time;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

@@ -41,42 +41,32 @@ public class ServerJMS {
 	private static BrokerService broker;
 
 	public static void main(String[] args) throws URISyntaxException, Exception {
-		try {
-			// BrokerService broker = new BrokerService();
-			// TransportConnector connector = new TransportConnector();
-			// connector.setUri(new URI("tcp://localhost:61616"));
-			// broker.addConnector(connector);
-			// broker.start();
-			//
-			BrokerService broker = new BrokerService();
-			broker.setPersistent(false);
-			broker.setUseShutdownHook(false);
-			// configure the broker
-			broker.addConnector("tcp://localhost:61616");
-			broker.addConnector("vm://localhost");
-			broker.start();
-			ActiveMQConnectionFactory mqfac = new ActiveMQConnectionFactory(
-					"vm://localhost");
-			TopicConnection connect = mqfac.createTopicConnection();
-			connect.start();
-			TopicSession session = connect.createTopicSession(false,
-					Session.AUTO_ACKNOWLEDGE);
-			ExecutorService exe = Executors.newCachedThreadPool();
-			setUpStocks();
-			for (Stock s : stocks) {
-				Topic topic;
-				topic = session.createTopic(s.getName());
-				Runnable r = new StockRunner(s, topic, session);
-				exe.execute(r);
-			}
 
-		} catch (NamingException e) {
-			e.printStackTrace();
-		} catch (JMSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// BrokerService broker = new BrokerService();
+		// TransportConnector connector = new TransportConnector();
+		// connector.setUri(new URI("tcp://localhost:61616"));
+		// broker.addConnector(connector);
+		// broker.start();
+		//
+		// BrokerService broker = new BrokerService();
+		// broker.setPersistent(false);
+		// broker.setUseShutdownHook(false);
+		// // configure the broker
+		// broker.addConnector("tcp://localhost:61616");
+		// broker.addConnector("vm://localhost");
+		// broker.start();
+
+		ExecutorService exe = Executors.newCachedThreadPool();
+		setUpStocks();
+		for (Stock s : stocks) {
+			Topic topic;
+
+			Runnable r = new StockRunner(s);
+			exe.execute(r);
 		}
-
+		SendSingle t=new SendSingle();
+		t.setStocks(stocks);
+		exe.execute(t);
 	}
 
 	private static void setUpStocks() {
@@ -87,7 +77,7 @@ public class ServerJMS {
 		int i = 0;
 		Random r = new Random();
 		for (String name : names) {
-			Stock t = new Stock(name, isns[i], r.nextInt(500), DateTime.now());
+			Stock t = new Stock(name, isns[i], r.nextInt(10000), DateTime.now());
 			i++;
 			stocks.add(t);
 		}
@@ -96,27 +86,45 @@ public class ServerJMS {
 	@AllArgsConstructor
 	private static class StockRunner implements Runnable {
 		private Stock stock;
-		private Topic topic;
-		private TopicSession session;
 
 		public void run() {
-			try {
-				stock = refreshStock(stock);
-				TopicPublisher publisher = session.createPublisher(topic);
-				MapMessage msg = session.createMapMessage();
-				msg.setStringProperty(ISNCON, stock.getIsn());
-				msg.setStringProperty(NAMECON, stock.getName());
-				msg.setDouble(PRICECON, stock.getPrice());
-				msg.setString(TIMECON, stock.getTime().toString());
-				publisher.send(msg);
-				Long timeout = (long) (5000 + Math.rint(10000 * Math.random()));
+			while (true) {
 				try {
-					Thread.sleep(timeout.longValue());
-				} catch (InterruptedException e) {
+
+					ActiveMQConnectionFactory mqfac = new ActiveMQConnectionFactory(
+							"admin", "admin",
+							ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
+					TopicConnection connect = mqfac.createTopicConnection(
+							"admin", "admin");
+					connect.start();
+
+					TopicSession session = connect.createTopicSession(false,
+							Session.AUTO_ACKNOWLEDGE);
+					Topic topic = session.createTopic(stock.getIsn());
+					stock = refreshStock(stock);
+
+					TopicPublisher publisher = session.createPublisher(topic);
+
+					MapMessage msg = session.createMapMessage();
+					msg.setStringProperty(ISNCON, stock.getIsn());
+					msg.setStringProperty(NAMECON, stock.getName());
+					msg.setDoubleProperty(PRICECON, stock.getPrice());
+					msg.setStringProperty(TIMECON, stock.getTime().toString());
+
+					publisher.publish(topic, msg);
+					addToQue(msg);
+					session.close();
+					connect.close();
+					Long timeout = (long) (5000 + Math.rint(10000 * Math
+							.random()));
+					try {
+						Thread.sleep(timeout.longValue());
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				} catch (JMSException e) {
 					e.printStackTrace();
 				}
-			} catch (JMSException e) {
-				e.printStackTrace();
 			}
 		}
 
@@ -124,6 +132,23 @@ public class ServerJMS {
 			s.setPrice((-0.2 + Math.random() * 0.4) * s.getPrice());
 			s.setTime(DateTime.now());
 			return s;
+		}
+
+		public void addToQue(MapMessage p) throws JMSException {
+			ActiveMQConnectionFactory mqfac = new ActiveMQConnectionFactory(
+					"admin", "admin",
+					ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
+			Connection con = mqfac.createQueueConnection("admin", "admin");
+			Session tp = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+			Destination destination = tp.createQueue(stock.getName());
+
+			// Create a MessageProducer from the Session to the Topic or Queue
+			MessageProducer producer = tp.createProducer(destination);
+			producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+			producer.send(p);
+			tp.close();
+			con.close();
 		}
 	}
 

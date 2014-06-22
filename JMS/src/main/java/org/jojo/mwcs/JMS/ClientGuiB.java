@@ -2,6 +2,8 @@ package org.jojo.mwcs.JMS;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -16,11 +18,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.jms.JMSException;
+import javax.jms.MapMessage;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueReceiver;
+import javax.jms.QueueRequestor;
+import javax.jms.QueueSession;
+import javax.jms.Session;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -30,6 +41,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.joda.time.DateTime;
+
+import sun.awt.SunToolkit.InfiniteLoop;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,14 +54,18 @@ public class ClientGuiB extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Getter
+		@Getter
 	@Setter
 	private Set<Stock> rows;
 	JTextArea area;
+	@Getter
+	@Setter
+	JTextField stockName;
 
 	public ClientGuiB(List<Stock> stocks) {
 		super("Client");
-		setLayout(new BorderLayout(5, 5));
+
+		setLayout(new BorderLayout());
 		setSize(300, 300);
 		setLocation(300, 300);
 		rows = new HashSet<>(stocks);
@@ -62,18 +81,18 @@ public class ClientGuiB extends JFrame {
 		area = new JTextArea(b.toString());
 		area.setLineWrap(true);
 		area.setEditable(false);
-		getContentPane().add(BorderLayout.CENTER, area);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+		addWindowListener(new Serial(this));
 		JPanel addPanel = new JPanel(new FlowLayout());
 		JLabel nameLabel = new JLabel("Type Name of Stock");
-		JButton ok = new JButton("Add Stock");
-		JButton remove = new JButton("Remove Stock");
+		stockName = new JTextField("");
+		JButton ok = new JButton("Request Stock");
+		ok.addActionListener(new RequestSingle(this));
 		getContentPane().add(area);
 		addPanel.add(nameLabel);
 		addPanel.add(ok);
-		addPanel.add(remove);
 		getContentPane().add(addPanel);
+		pack();
 		setVisible(true);
 	}
 
@@ -120,7 +139,10 @@ public class ClientGuiB extends JFrame {
 		}
 
 		@Override
-		public void windowClosed(WindowEvent e) {
+		public void windowClosing(WindowEvent e) {
+			// if (toSerial == null || toSerial.isEmpty()) {
+			// return;
+			// }
 			try {
 				JAXBContext context = JAXBContext.newInstance(JaxbList.class);
 				Marshaller m = context.createMarshaller();
@@ -129,9 +151,13 @@ public class ClientGuiB extends JFrame {
 				Path f = Files.createFile(Paths.get(serialpath + fileName));
 				OutputStream stream = Files.newOutputStream(f,
 						StandardOpenOption.WRITE, StandardOpenOption.APPEND);
-				JaxbList list = new JaxbList();
-				list.setStocks(toSerial);
-				gui.updateStocks();
+				Stock testStock = new Stock("Test", "hallo", 30, DateTime.now());
+				Stock testStock2 = new Stock("test2", "e", 32, DateTime.now());
+				toSerial = new ArrayList<Stock>();
+				toSerial.add(testStock);
+				toSerial.add(testStock2);
+				JaxbList list = new JaxbList(toSerial);
+
 				m.marshal(list, stream);
 				stream.flush();
 				stream.close();
@@ -146,29 +172,42 @@ public class ClientGuiB extends JFrame {
 		@Override
 		public void windowOpened(WindowEvent e) {
 			if (!Files.exists(Paths.get(serialpath + fileName))) {
-				gui.setRows(new HashSet<Stock>());
+
 				return;
 			}
 			try {
-				JAXBContext context = JAXBContext.newInstance(Stock.class);
+				JAXBContext context = JAXBContext.newInstance(JaxbList.class);
 				Unmarshaller un = context.createUnmarshaller();
-				JaxbList list = (JaxbList) un.unmarshal(Paths.get(
+				JaxbList toadd = (JaxbList) un.unmarshal(Paths.get(
 						serialpath + fileName).toFile());
-				HashSet<Stock> tmp = new HashSet<>(list.getStocks());
-				gui.setRows(tmp);
+				gui.setRows(new HashSet<Stock>(toadd.getStocks()));
 
 			} catch (JAXBException e1) {
 				e1.printStackTrace();
 			}
 		}
 
-		@XmlRootElement(name = "Stocks")
+		@XmlRootElement(name = "Stockliste")
 		@XmlAccessorType(XmlAccessType.FIELD)
 		private static class JaxbList {
-			@Getter
-			@Setter
-			@XmlElement(name = "stock")
-			List<Stock> stocks;
+			public JaxbList() {
+			}
+
+			public JaxbList(List<Stock> stocks) {
+				super();
+				this.stocks = stocks;
+			}
+
+			public List<Stock> getStocks() {
+				return this.stocks;
+			}
+
+			public void setStocks(List<Stock> stocks) {
+				this.stocks = stocks;
+			}
+
+			@XmlElement(name = "stocks", type = Stock.class)
+			private List<Stock> stocks;
 		}
 	}
 }

@@ -2,9 +2,11 @@ package org.jojo.mwcs.JMS;
 
 import java.util.ArrayList;
 
+import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
+import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Session;
 import javax.jms.Topic;
@@ -17,6 +19,10 @@ import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.command.ActiveMQTopic;
+import org.apache.activemq.jndi.ActiveMQInitialContextFactory;
+import org.apache.avalon.framework.activity.Suspendable;
 import org.joda.time.DateTime;
 
 public class ClientB {
@@ -31,21 +37,18 @@ public class ClientB {
 
 		try {
 			ctx = new InitialContext();
-			TopicConnectionFactory fact = (TopicConnectionFactory) ctx
-					.lookup("ConnectionFactory");
+			ActiveMQConnectionFactory fact = new ActiveMQConnectionFactory(
+					ActiveMQConnectionFactory.DEFAULT_USER,
+					ActiveMQConnectionFactory.DEFAULT_PASSWORD,
+					ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
 			connect = fact.createTopicConnection();
 			session = connect.createTopicSession(false,
 					Session.AUTO_ACKNOWLEDGE);
-			connect.start();
 			for (String top : isns) {
-				Topic topic;
-				try {
-					topic = (Topic) ctx.lookup(top);
-				} catch (NameNotFoundException ex) {
-					topic = session.createTopic(top);
-					ctx.bind(top, topic);
-				}
-				TopicSubscriber subscrib = session.createSubscriber(topic);
+
+				Topic dest = session.createTopic(top);
+
+				MessageConsumer subscrib = session.createConsumer(dest);
 
 				MessageListener list = new MessageListener() {
 
@@ -61,6 +64,7 @@ public class ClientB {
 							DateTime time = DateTime.parse(message
 									.getStringProperty(ServerJMS.getTIMECON()));
 							Stock tmp = new Stock(name, id, price, time);
+							System.out.println("Got Stock! Name:"+name+"Price:"+price+" From "+time.toString());
 							gui.insertStock(tmp);
 						} catch (JMSException e) {
 							e.printStackTrace();
@@ -69,8 +73,10 @@ public class ClientB {
 					}
 				};
 				subscrib.setMessageListener(list);
-				connect.start();
 
+			}
+			connect.start();
+			while (true) {
 			}
 		} finally {
 
