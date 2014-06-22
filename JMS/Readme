@@ -1,0 +1,9 @@
+It is a maven project so it should build by running 
+first "mvn install" 
+Afterwards run "mvn clean compile" 
+
+The broker properties are set acording to the default activemq settings 
+(default broker URL and user:admin password:admin) 
+
+
+there is also an ant buildfile include if this should be run 

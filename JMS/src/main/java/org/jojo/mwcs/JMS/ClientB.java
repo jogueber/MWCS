@@ -1,5 +1,6 @@
 package org.jojo.mwcs.JMS;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.jms.JMSException;
@@ -63,6 +64,11 @@ public class ClientB {
 									+ time.toString());
 							gui.insertStock(tmp);
 						} catch (JMSException e) {
+							e.printStackTrace();
+						} catch (InvocationTargetException e) {
+						
+							e.printStackTrace();
+						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
 

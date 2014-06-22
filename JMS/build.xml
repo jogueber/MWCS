@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="JMS">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../Downloads etc/eclipse-jee-kepler-SR2-win32-x86_64/eclipse"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+    <path id="Maven Dependencies.libraryclasspath">
+        <pathelement location="C:/Users/jojo/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/joda-time/joda-time/2.3/joda-time-2.3.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/org/projectlombok/lombok/1.12.6/lombok-1.12.6.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/javax/jms/javax.jms-api/2.0/javax.jms-api-2.0.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/commons-lang/commons-lang/2.3/commons-lang-2.3.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/org/apache/camel/camel-activemq/1.1.0/camel-activemq-1.1.0.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/org/apache/camel/camel-jms/1.1.0/camel-jms-1.1.0.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/org/apache/camel/camel-core/1.1.0/camel-core-1.1.0.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/commons-logging/commons-logging-api/1.0.4/commons-logging-api-1.0.4.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/org/springframework/spring/2.0.5/spring-2.0.5.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/org/apache/geronimo/specs/geronimo-jms_1.1_spec/1.0/geronimo-jms_1.1_spec-1.0.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/org/apache/camel/camel-spring/1.1.0/camel-spring-1.1.0.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/javax/xml/bind/jaxb-api/2.0/jaxb-api-2.0.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/javax/xml/bind/jsr173_api/1.0/jsr173_api-1.0.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/com/sun/xml/bind/jaxb-impl/2.0.3/jaxb-impl-2.0.3.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/javax/activation/activation/1.1/activation-1.1.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/org/apache/activemq/activemq-core/4.1.1/activemq-core-4.1.1.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/backport-util-concurrent/backport-util-concurrent/2.1/backport-util-concurrent-2.1.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/commons-logging/commons-logging/1.1/commons-logging-1.1.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/log4j/log4j/1.2.12/log4j-1.2.12.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/logkit/logkit/1.0.1/logkit-1.0.1.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/avalon-framework/avalon-framework/4.1.3/avalon-framework-4.1.3.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/javax/servlet/servlet-api/2.3/servlet-api-2.3.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/org/apache/activemq/activeio-core/3.0.0-incubator/activeio-core-3.0.0-incubator.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/org/apache/geronimo/specs/geronimo-j2ee-management_1.0_spec/1.0/geronimo-j2ee-management_1.0_spec-1.0.jar"/>
+        <pathelement location="C:/Users/jojo/.m2/repository/org/apache/geronimo/specs/geronimo-jta_1.0.1B_spec/1.0/geronimo-jta_1.0.1B_spec-1.0.jar"/>
+    </path>
+    <path id="JMS.classpath">
+        <pathelement location="target/classes"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.ClientB.classpath">
+        <path refid="JMS.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <path id="run.ServerJMS.classpath">
+        <path refid="JMS.classpath"/>
+        <path refid="Maven Dependencies.libraryclasspath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="target/classes"/>
+        <copy includeemptydirs="false" todir="target/classes">
+            <fileset dir="src/main/java">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="target/classes"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src/main/java"/>
+            <classpath refid="JMS.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="ClientB">
+        <java classname="org.jojo.mwcs.JMS.ClientB" failonerror="true" fork="yes">
+            <classpath refid="run.ClientB.classpath"/>
+        </java>
+    </target>
+    <target name="ServerJMS">
+        <java classname="org.jojo.mwcs.JMS.ServerJMS" failonerror="true" fork="yes">
+            <classpath refid="run.ServerJMS.classpath"/>
+        </java>
+    </target>
+</project>

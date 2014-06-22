@@ -2,6 +2,7 @@ package org.jojo.mwcs.JMS;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 import javax.jms.Destination;
@@ -80,6 +81,12 @@ public class RequestSingle implements ActionListener, MessageListener {
 					+ " From " + time.toString());
 			gui.insertStock(tmp);
 		} catch (JMSException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

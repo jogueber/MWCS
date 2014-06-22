@@ -6,6 +6,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -86,10 +87,12 @@ public class ClientGuiB extends JFrame {
 		pack();
 		setVisible(true);
 	}
-	//deserialisierung
+
+	// deserialisierung
 	private void recoverStocks() {
-		if (!Files.exists(Paths.get(Serial.getFileName()
-				+ Serial.getSerialpath()))) {
+
+		if (!Files.exists(Paths.get(Serial.getSerialpath()
+				+ Serial.getFileName()))) {
 
 			return;
 		}
@@ -97,7 +100,7 @@ public class ClientGuiB extends JFrame {
 			JAXBContext context = JAXBContext.newInstance(JaxbList.class);
 			Unmarshaller un = context.createUnmarshaller();
 			JaxbList toadd = (JaxbList) un.unmarshal(Paths.get(
-					Serial.getFileName() + Serial.getSerialpath()).toFile());
+					Serial.getSerialpath() + Serial.getFileName()).toFile());
 			this.setRows(new HashSet<Stock>(toadd.getStocks()));
 
 		} catch (JAXBException e1) {
@@ -105,8 +108,9 @@ public class ClientGuiB extends JFrame {
 		}
 	}
 
-	public void insertStock(final Stock s) {
-		SwingUtilities.invokeLater(new Runnable() {
+	public void insertStock(final Stock s) throws InvocationTargetException,
+			InterruptedException {
+		SwingUtilities.invokeAndWait(new Runnable() {
 
 			@Override
 			public void run() {
@@ -121,6 +125,7 @@ public class ClientGuiB extends JFrame {
 					b.append(System.lineSeparator());
 				}
 				area.setText(b.toString());
+				repaint();
 
 			}
 		});
@@ -133,6 +138,7 @@ public class ClientGuiB extends JFrame {
 			@Override
 			public void run() {
 				StringBuffer b = new StringBuffer();
+				area = new JTextArea();
 				for (Stock t : rows) {
 
 					b.append("ISN:" + t.getIsn() + "  ");
