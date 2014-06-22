@@ -2,32 +2,24 @@ package org.jojo.mwcs.JMS;
 
 import java.util.ArrayList;
 
-import javax.jms.Destination;
 import javax.jms.JMSException;
-import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Session;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
-import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicSession;
-import javax.jms.TopicSubscriber;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.command.ActiveMQTopic;
-import org.apache.activemq.jndi.ActiveMQInitialContextFactory;
-import org.apache.avalon.framework.activity.Suspendable;
 import org.joda.time.DateTime;
 
 public class ClientB {
 	static ClientGuiB gui;
-
+	//Abfrage von Publish subscirbe
 	public static void main(String[] args) throws JMSException, NamingException {
 		gui = new ClientGuiB(new ArrayList<Stock>());
 		String[] isns = ServerJMS.getIsns();
@@ -44,6 +36,7 @@ public class ClientB {
 			connect = fact.createTopicConnection();
 			session = connect.createTopicSession(false,
 					Session.AUTO_ACKNOWLEDGE);
+			//für alle subscriben
 			for (String top : isns) {
 
 				Topic dest = session.createTopic(top);
@@ -99,7 +92,4 @@ public class ClientB {
 
 	}
 
-	public static void addTopic(String isn) {
-
-	}
 }

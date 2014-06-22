@@ -2,11 +2,8 @@ package org.jojo.mwcs.JMS;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -18,14 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.jms.JMSException;
-import javax.jms.MapMessage;
-import javax.jms.Queue;
-import javax.jms.QueueConnection;
-import javax.jms.QueueReceiver;
-import javax.jms.QueueRequestor;
-import javax.jms.QueueSession;
-import javax.jms.Session;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,10 +30,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
-import org.joda.time.DateTime;
-
-import sun.awt.SunToolkit.InfiniteLoop;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -121,7 +106,7 @@ public class ClientGuiB extends JFrame {
 		area.setText(b.toString());
 
 	}
-
+	// Aufgabe c Serialisierung
 	private static class Serial extends WindowAdapter {
 		private List<Stock> toSerial;
 
@@ -137,12 +122,12 @@ public class ClientGuiB extends JFrame {
 		public Serial(ClientGuiB a) {
 			toSerial = new ArrayList<Stock>(a.getRows());
 		}
-
+		//Serialisieren
 		@Override
 		public void windowClosing(WindowEvent e) {
-			// if (toSerial == null || toSerial.isEmpty()) {
-			// return;
-			// }
+			 if (toSerial == null || toSerial.isEmpty()) {
+			 return;
+			 }
 			try {
 				JAXBContext context = JAXBContext.newInstance(JaxbList.class);
 				Marshaller m = context.createMarshaller();
@@ -151,11 +136,6 @@ public class ClientGuiB extends JFrame {
 				Path f = Files.createFile(Paths.get(serialpath + fileName));
 				OutputStream stream = Files.newOutputStream(f,
 						StandardOpenOption.WRITE, StandardOpenOption.APPEND);
-				Stock testStock = new Stock("Test", "hallo", 30, DateTime.now());
-				Stock testStock2 = new Stock("test2", "e", 32, DateTime.now());
-				toSerial = new ArrayList<Stock>();
-				toSerial.add(testStock);
-				toSerial.add(testStock2);
 				JaxbList list = new JaxbList(toSerial);
 
 				m.marshal(list, stream);
@@ -168,7 +148,7 @@ public class ClientGuiB extends JFrame {
 				e1.printStackTrace();
 			}
 		}
-
+		//Recovern
 		@Override
 		public void windowOpened(WindowEvent e) {
 			if (!Files.exists(Paths.get(serialpath + fileName))) {

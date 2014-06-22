@@ -11,9 +11,7 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
-import javax.jms.Queue;
 import javax.jms.QueueConnection;
-import javax.jms.QueueRequestor;
 import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.TemporaryQueue;
@@ -24,13 +22,13 @@ import org.joda.time.DateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
+// Aufgabe d
 @AllArgsConstructor
 public class RequestSingle implements ActionListener, MessageListener {
 	ClientGuiB gui;
 	@Getter
 	private static final String requestName = "REQUEST";
-
+	//Anfrage Senden
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (gui.stockName.getText() == null
@@ -62,7 +60,7 @@ public class RequestSingle implements ActionListener, MessageListener {
 		}
 
 	}
-
+	//Antwort verarbeiten
 	@Override
 	public void onMessage(Message message) {
 

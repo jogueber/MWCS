@@ -1,6 +1,5 @@
 package org.jojo.mwcs.JMS;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,15 +7,12 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.naming.*;
 import javax.jms.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.broker.BrokerService;
-import org.apache.activemq.broker.TransportConnector;
 import org.joda.time.DateTime;
 
 public class ServerJMS {
@@ -37,8 +33,7 @@ public class ServerJMS {
 	@Getter
 	private final static String NAMECON = "NAME";
 
-	static Context ctx;
-	private static BrokerService broker;
+	
 
 	public static void main(String[] args) throws URISyntaxException, Exception {
 
@@ -55,15 +50,14 @@ public class ServerJMS {
 		// broker.addConnector("tcp://localhost:61616");
 		// broker.addConnector("vm://localhost");
 		// broker.start();
-
+		//Setup der Threads für Stocks
 		ExecutorService exe = Executors.newCachedThreadPool();
 		setUpStocks();
 		for (Stock s : stocks) {
-			Topic topic;
-
 			Runnable r = new StockRunner(s);
 			exe.execute(r);
 		}
+		//Single Request Handling
 		SendSingle t=new SendSingle();
 		t.setStocks(stocks);
 		exe.execute(t);
@@ -82,7 +76,7 @@ public class ServerJMS {
 			stocks.add(t);
 		}
 	}
-
+	// Einzelne Stocks
 	@AllArgsConstructor
 	private static class StockRunner implements Runnable {
 		private Stock stock;

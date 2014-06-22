@@ -13,12 +13,10 @@ import javax.jms.MessageProducer;
 import javax.jms.QueueConnection;
 import javax.jms.QueueSession;
 import javax.jms.Session;
-import javax.jms.TextMessage;
-
 import lombok.Setter;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-
+//Aufgabe d handling of Single Requests
 public class SendSingle implements MessageListener, Runnable {
 	@Setter
 	private List<Stock> stocks;
