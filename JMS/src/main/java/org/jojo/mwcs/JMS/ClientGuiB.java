@@ -73,9 +73,10 @@ public class ClientGuiB extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addWindowListener(new Serial(this));
 		JPanel addPanel = new JPanel(new FlowLayout());
+		addPanel.setSize(200, 200);
 		JLabel nameLabel = new JLabel("Type Name of Stock");
 		stockName = new JTextField("");
-		stockName.setSize(30, 30);
+		stockName.setSize(100, 100);
 		JButton ok = new JButton("Request Stock");
 		// Single Request Handling
 		ok.addActionListener(new RequestSingle(this));

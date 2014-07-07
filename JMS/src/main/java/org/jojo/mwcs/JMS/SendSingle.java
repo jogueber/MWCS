@@ -67,8 +67,8 @@ public class SendSingle implements MessageListener, Runnable {
 	public void run() {
 		try {
 			ActiveMQConnectionFactory mqfac = new ActiveMQConnectionFactory(
-					ClientB.getUsername(), ClientB.getPassword(),
-					ClientB.getUrl());
+					ActiveMQConnectionFactory.DEFAULT_USER, ActiveMQConnectionFactory.DEFAULT_PASSWORD,
+					ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
 			QueueConnection con = mqfac.createQueueConnection();
 			session = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 			Destination dest = session.createQueue(RequestSingle

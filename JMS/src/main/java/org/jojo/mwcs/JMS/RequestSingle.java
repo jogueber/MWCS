@@ -37,8 +37,8 @@ public class RequestSingle implements ActionListener, MessageListener {
 			return;
 		try {
 			ActiveMQConnectionFactory mqfac = new ActiveMQConnectionFactory(
-					ServerJMS.getUsername(), ServerJMS.getPassword(),
-					ServerJMS.getUrl());
+					ActiveMQConnectionFactory.DEFAULT_USER, ActiveMQConnectionFactory.DEFAULT_PASSWORD,
+					ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
 
 			QueueConnection con = mqfac.createQueueConnection();
 			QueueSession session = con.createQueueSession(false,

@@ -99,8 +99,8 @@ public class ServerJMS {
 				try {
 
 					ActiveMQConnectionFactory mqfac = new ActiveMQConnectionFactory(
-							ServerJMS.getUsername(), ServerJMS.getPassword(),
-							ServerJMS.getUrl());
+							ActiveMQConnectionFactory.DEFAULT_USER, ActiveMQConnectionFactory.DEFAULT_PASSWORD,
+							ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
 					TopicConnection connect = mqfac.createTopicConnection();
 					connect.start();
 
