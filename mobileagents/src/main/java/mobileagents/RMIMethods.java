@@ -6,8 +6,9 @@ import java.rmi.*;
 
 public interface RMIMethods extends Remote {
 	
-	public Container invokeCompile(CompiledContainer container) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,RemoteException;
+	public Container invokeCompile(CompiledContainer container) throws RemoteException;
 	
-	public Container invokeRaw(SourceContainer container) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, RemoteException;
+	public Container invokeRaw(SourceContainer container) throws  RemoteException;
 
+	public Container invokeThis(CompiledContainer con)throws RemoteException;
 }
